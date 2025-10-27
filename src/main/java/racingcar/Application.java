@@ -2,7 +2,8 @@ package racingcar;
 
 import camp.nextstep.edu.missionutils.Console;
 
-import static racingcar.CarController.spellCheck;
+import static racingcar.CarController.validateNameLength;
+
 
 public class Application {
     public static void main(String[] args) {
@@ -11,6 +12,9 @@ public class Application {
             String input = Console.readLine();
             System.out.println("시도할 횟수는 몇 회인가요?");
             int count = Integer.parseInt(Console.readLine());
+            if (count < 1) {
+                throw new IllegalArgumentException("[ERROR] 시도 횟수는 1 이상의 숫자여야 합니다.");
+            }
             CarController carController = new CarController();
             carController.run(input,count);
         }catch (NumberFormatException e) {
@@ -24,12 +28,7 @@ public class Application {
         }
     }
 
-    private static String[] getStrings(String[] parts) {
-        String[] nameArray = new String[parts.length - 1];
-        System.arraycopy(parts, 0, nameArray, 0, parts.length - 1);
-        spellCheck(nameArray);
-        return nameArray;
-    }
+
 
     private static void check1(String[] parts) {
         if (parts.length < 2) {

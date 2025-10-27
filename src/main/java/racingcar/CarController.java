@@ -16,13 +16,13 @@ public class CarController {
 
     public void run(String input,int count) {
         String[] split = getStrings(input);
-        spellCheck(split);
+        validateNameLength(split);
         addCar(split);
         racing(count);
     }
 
     private static String[] getStrings(String input) {
-        String[] split = input.split(",");
+        String[] split = input.trim().split(",");
         String[] trimmedSplit = new String[split.length];
         for (int i = 0; i < split.length; i++) {
             trimmedSplit[i] = split[i].trim();
@@ -30,7 +30,7 @@ public class CarController {
         return split;
     }
 
-    public static void spellCheck(String[] split) {
+    public static void validateNameLength(String[] split) {
         for (String s : split) {
             if(s.length()>5) {
                 throw new IllegalArgumentException("글자수가 초과하였습니다");
@@ -71,12 +71,23 @@ public class CarController {
 
     private void finalResult() {
         Collections.sort(cars, Comparator.comparing(Car::getCount).reversed());
-        int a=cars.get(0).getCount();
-        System.out.print("최종 우승자 : "+cars.get(0).getName());
-        for (int i = 1; i < cars.size(); i++) {
-            System.out.print(", "+cars.get(i).getName());
+
+        int maxCount = cars.get(0).getCount();
+
+        StringBuilder winnerBuilder = new StringBuilder();
+
+        for (Car car : cars) {
+            if (car.getCount() == maxCount) {
+                if (winnerBuilder.length() > 0) {
+                    winnerBuilder.append(", ");
+                }
+                winnerBuilder.append(car.getName());
+            } else {
+                break;
+            }
         }
 
+        System.out.println("최종 우승자 : " + winnerBuilder.toString());
     }
 
 }
